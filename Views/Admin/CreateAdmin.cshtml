@@ -1,0 +1,66 @@
+@{
+    ViewData["Title"] = "Add New Admin";
+}
+
+<div class="max-w-2xl mx-auto py-8">
+    <div class="bg-white rounded-2xl shadow-xl shadow-primary-100/50 border border-gray-100 overflow-hidden text-center p-8 space-y-6">
+        
+        <!-- Icon & Header -->
+        <div class="inline-flex items-center justify-center w-20 h-20 bg-primary-50 rounded-2xl mb-2">
+            <svg class="w-10 h-10 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+            </svg>
+        </div>
+        
+        <div class="space-y-2">
+            <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight">Add Staff Member</h2>
+            <p class="text-slate-500 font-medium max-w-sm mx-auto">Create a new administrator account. Must use the <span class="text-primary-600 font-bold">@@admin.siba.edu.pk</span> domain.</p>
+        </div>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="bg-red-50 text-red-600 text-sm p-4 rounded-xl border border-red-100 flex items-center justify-center space-x-2 animate-in fade-in slide-in-from-top-2">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <span class="font-semibold">@ViewBag.Error</span>
+            </div>
+        }
+
+        @if (ViewBag.Success != null)
+        {
+            <div class="bg-emerald-50 text-emerald-600 text-sm p-4 rounded-xl border border-emerald-100 flex items-center justify-center space-x-2 animate-in fade-in slide-in-from-top-2">
+                <i class="fa-solid fa-circle-check"></i>
+                <span class="font-semibold">@ViewBag.Success</span>
+            </div>
+        }
+
+        <form asp-action="CreateAdmin" method="post" class="text-left space-y-5">
+            <div class="space-y-2 text-center">
+                <label class="text-sm font-bold text-slate-700">Full Name</label>
+                <input type="text" name="username" required
+                       class="w-full px-5 py-4 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-primary-600 focus:ring-4 focus:ring-primary-600/10 text-slate-900 transition-all placeholder:text-slate-400"
+                       placeholder="e.g. John Doe">
+            </div>
+
+            <div class="space-y-2 text-center">
+                <label class="text-sm font-bold text-slate-700">Staff Email</label>
+                <input type="email" name="email" required
+                       class="w-full px-5 py-4 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-primary-600 focus:ring-4 focus:ring-primary-600/10 text-slate-900 transition-all placeholder:text-slate-400"
+                       placeholder="name@@admin.siba.edu.pk">
+            </div>
+
+            <div class="space-y-2 text-center">
+                <label class="text-sm font-bold text-slate-700">Temporary Password</label>
+                <input type="password" name="password" required
+                       class="w-full px-5 py-4 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-primary-600 focus:ring-4 focus:ring-primary-600/10 text-slate-900 transition-all placeholder:text-slate-400"
+                       placeholder="••••••••">
+            </div>
+
+            <div class="pt-4 flex items-center space-x-4">
+                <a asp-action="Index" class="flex-1 py-4 text-center font-bold text-slate-500 hover:text-slate-700 transition-colors">Cancel</a>
+                <button type="submit" class="flex-[2] py-4 bg-primary-600 text-white rounded-xl font-bold text-lg shadow-lg shadow-primary-200 hover:bg-primary-700 hover:shadow-primary-300 transition-all active:scale-[0.98]">
+                    Create Account
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

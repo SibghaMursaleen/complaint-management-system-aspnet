@@ -1,0 +1,105 @@
+@model SIBA.ComplaintSystem.Models.ComplaintArchive
+@{
+    ViewData["Title"] = "Resolution Proof";
+}
+
+<div class="max-w-4xl mx-auto space-y-6 pb-20">
+    <div class="flex items-center justify-between no-print">
+        <nav class="flex items-center space-x-2 text-sm text-gray-500 font-medium">
+            <a asp-action="Resolved" class="hover:text-primary-600">Archives</a>
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 5l7 7-7 7" /></svg>
+            <span class="text-gray-900">Proof Log #@Model.ComplaintId</span>
+        </nav>
+        <button onclick="window.print()" class="inline-flex items-center px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-lg hover:bg-slate-800 transition-all active:scale-95">
+            <svg class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+            Download / Print Proof
+        </button>
+    </div>
+
+    <!-- The Official Document -->
+    <div class="bg-white shadow-2xl rounded-3xl overflow-hidden border border-gray-100 print:shadow-none print:border-none">
+        <!-- Document Header -->
+        <div class="bg-slate-50 p-10 border-b border-gray-100 flex justify-between items-start">
+            <div class="space-y-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-primary-600 rounded-xl flex items-center justify-center text-white font-black text-xl">S</div>
+                    <div>
+                        <h1 class="text-xl font-black text-slate-900 leading-none tracking-tight">SIBA Complaint System</h1>
+                        <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Sukkur IBA University - Official Resolution Record</p>
+                    </div>
+                </div>
+                <div class="inline-flex items-center px-3 py-1 bg-white border border-slate-200 rounded-full text-[10px] font-black text-slate-700 uppercase tracking-widest">
+                    Permanent Archive Record
+                </div>
+            </div>
+            <div class="text-right">
+                <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Log Serial Number</div>
+                <div class="text-lg font-mono font-bold text-slate-900">ARC-@Model.Id.ToString("D6")</div>
+            </div>
+        </div>
+
+        <div class="p-12 space-y-10">
+            <!-- Metadata Grid -->
+            <div class="grid grid-cols-2 gap-12">
+                <div class="space-y-6">
+                    <div>
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Subject / Title</label>
+                        <p class="text-lg font-extrabold text-slate-900">@Model.ComplaintTitle</p>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Student / Complainant</label>
+                        <p class="text-sm font-bold text-slate-700">@Model.StudentName</p>
+                    </div>
+                </div>
+                <div class="space-y-6 text-right">
+                    <div>
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Resolution Date</label>
+                        <p class="text-sm font-bold text-slate-900">@Model.ResolvedAt.ToString("MMMM dd, yyyy")</p>
+                        <p class="text-xs text-slate-500">At @Model.ResolvedAt.ToString("HH:mm:ss")</p>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Attesting Officer</label>
+                        <p class="text-sm font-bold text-slate-900">@Model.ResolvedBy</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="h-px bg-slate-100"></div>
+
+            <!-- Full Transcript -->
+            <div class="space-y-4">
+                <h3 class="text-xs font-black text-slate-900 uppercase tracking-widest flex items-center">
+                    <svg class="h-4 w-4 mr-2 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+                    Certified Discussion Transcript
+                </h3>
+                <div class="bg-slate-50 rounded-2xl p-8 border border-slate-100">
+                    <pre class="whitespace-pre-wrap font-mono text-xs leading-relaxed text-slate-700">@Model.FullTranscript</pre>
+                </div>
+            </div>
+
+            <!-- Footer Compliance -->
+            <div class="pt-10 border-t border-slate-100 flex justify-between items-end">
+                <div class="max-w-xs">
+                    <p class="text-[9px] text-slate-400 font-medium italic">
+                        This document is a computer-generated official record of Sukkur IBA University Complaint Management System. 
+                        Tampering with this log is a violation of university policy.
+                    </p>
+                </div>
+                <div class="text-right">
+                    <p class="text-[9px] font-black text-slate-300 uppercase tracking-[0.2em] mb-4">Official Verification Seal</p>
+                    <div class="inline-block p-4 border-4 border-primary-50 px-8 rounded-2xl bg-white shadow-inner">
+                        <span class="text-xs font-black text-primary-200 uppercase tracking-widest">SIBA HELP DESK</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    @@media print {
+        .no-print { display: none !important; }
+        body { background-color: white !important; }
+        .max-w-4xl { max-width: 100% !important; margin: 0 !important; }
+    }
+</style>

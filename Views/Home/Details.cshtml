@@ -1,0 +1,148 @@
+@model SIBA.ComplaintSystem.Models.Complaint
+@{
+    ViewData["Title"] = "Complaint Discussion";
+    var messages = ViewBag.Messages as List<SIBA.ComplaintSystem.Models.ComplaintMessage> ?? new List<SIBA.ComplaintSystem.Models.ComplaintMessage>();
+}
+
+<div class="max-w-5xl mx-auto space-y-6 pb-20">
+    <!-- Breadcrumbs / Back -->
+    <nav class="flex items-center space-x-2 text-sm text-gray-500">
+        <a asp-action="List" class="hover:text-primary-600 transition-colors">My Complaints</a>
+        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 5l7 7-7 7" /></svg>
+        <span class="text-gray-900 font-medium">Ticket #@Model.Id</span>
+    </nav>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Sidebar: Complaint Summary -->
+        <div class="space-y-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <h3 class="text-lg font-bold text-gray-900 mb-4 border-b border-gray-50 pb-2">Ticket Summary</h3>
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest block mb-1">Status</label>
+                        <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-bold @(Model.Status == "Resolved" ? "bg-green-100 text-green-700" : "bg-primary-100 text-primary-700")">
+                            @Model.Status.ToUpper()
+                        </span>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest block mb-1">Category</label>
+                        <p class="text-sm font-semibold text-gray-700">@Model.Category</p>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest block mb-1">Priority</label>
+                        <p class="text-sm font-semibold text-gray-700">@Model.Priority</p>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest block mb-1">Filed Date</label>
+                        <p class="text-sm font-semibold text-gray-700">@Model.CreatedAt.ToString("MMM dd, yyyy")</p>
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model.AttachmentPath))
+                    {
+                        <div class="pt-4 border-t border-gray-50">
+                            <a href="@Model.AttachmentPath" target="_blank" class="flex items-center space-x-2 text-sm font-bold text-primary-600 hover:text-primary-700">
+                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg>
+                                <span>View Evidence</span>
+                            </a>
+                        </div>
+                    }
+                    @if (Model.Status == "Resolved")
+                    {
+                        <div class="pt-4 border-t border-gray-50">
+                            <a asp-action="ViewProof" asp-route-id="@Model.Id" class="flex items-center space-x-2 text-sm font-bold text-green-600 hover:text-green-700">
+                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                                <span>Resolution Proof Log</span>
+                            </a>
+                        </div>
+                        <div class="pt-4 border-t border-gray-50">
+                            <form asp-action="Delete" method="post" onsubmit="return confirm('Permanently remove this resolved complaint from your dashboard? Official university records will still be maintained.')" class="w-full">
+                                <input type="hidden" name="id" value="@Model.Id" />
+                                <button type="submit" class="flex items-center space-x-2 text-sm font-bold text-red-600 hover:text-red-700 w-full transition-colors">
+                                    <svg style="width: 20px; height: 20px;" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                    <span>Delete Record</span>
+                                </button>
+                            </form>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Discussion Thread -->
+        <div class="lg:col-span-2 space-y-6">
+            <!-- Original Complaint Card -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="p-6 bg-slate-50 border-b border-gray-100">
+                    <h2 class="text-xl font-extrabold text-gray-900">@Model.Title</h2>
+                </div>
+                <div class="p-6">
+                    <p class="text-gray-700 leading-relaxed whitespace-pre-wrap">@Model.Description</p>
+                </div>
+            </div>
+
+            <!-- Messages Thread -->
+            <div class="space-y-4">
+                <div class="flex items-center space-x-2 text-gray-400 py-2">
+                    <div class="h-px flex-1 bg-gray-100"></div>
+                    <span class="text-[11px] font-bold uppercase tracking-widest">Conversation History</span>
+                    <div class="h-px flex-1 bg-gray-100"></div>
+                </div>
+
+                @if (!messages.Any())
+                {
+                    <div class="text-center py-8 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
+                        <p class="text-sm text-gray-400 font-medium">No messages yet. Waiting for administration response.</p>
+                    </div>
+                }
+                else
+                {
+                    @foreach (var msg in messages)
+                    {
+                        var isMe = msg.SenderId == Model.UserId;
+                        <div class="flex @(isMe ? "justify-end" : "justify-start")">
+                            <div class="max-w-[80%] flex flex-col @(isMe ? "items-end" : "items-start")">
+                                <div class="flex items-center space-x-2 mb-1">
+                                    <span class="text-[10px] font-bold @(isMe ? "text-primary-600" : "text-slate-500") uppercase tracking-tight">
+                                        @(isMe ? "Me" : "Sukkur IBA Admin")
+                                    </span>
+                                    <span class="text-[10px] text-gray-400">@msg.SentAt.ToString("HH:mm")</span>
+                                </div>
+                                <div class="px-4 py-3 rounded-2xl text-sm shadow-sm @(isMe ? "bg-primary-600 text-white rounded-tr-none" : "bg-white border border-gray-100 text-gray-800 rounded-tl-none")">
+                                    @msg.Content
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+
+            <!-- Send Message Input -->
+            <div class="mt-8">
+                @if (Model.Status == "Resolved")
+                {
+                    <div class="bg-indigo-50 border border-indigo-100 rounded-3xl p-10 text-center space-y-4">
+                         <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto shadow-sm text-indigo-600 border border-indigo-100">
+                            <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                         </div>
+                         <div class="space-y-1">
+                            <h4 class="text-sm font-extrabold text-indigo-900 uppercase tracking-widest">Conversation Closed</h4>
+                            <p class="text-[11px] text-indigo-500 max-w-xs mx-auto font-medium leading-relaxed">This ticket has been marked as resolved. The discussion is locked to maintain the integrity of the official resolution record.</p>
+                         </div>
+                    </div>
+                }
+                else
+                {
+                    <form asp-action="AddMessage" method="post" class="bg-white rounded-2xl shadow-lg border border-gray-100 p-4">
+                        <input type="hidden" name="complaintId" value="@Model.Id" />
+                        <textarea name="content" rows="3" class="w-full border-none focus:ring-0 p-2 text-sm text-gray-800 placeholder-gray-400" placeholder="Type your message to the administration..."></textarea>
+                        <div class="flex justify-end pt-2 border-t border-gray-50">
+                            <button type="submit" class="bg-primary-600 text-white px-6 py-2 rounded-xl text-sm font-bold shadow-md shadow-primary-200 hover:bg-primary-700 transition-all active:scale-95 flex items-center space-x-2">
+                                <span>Send Message</span>
+                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
+                            </button>
+                        </div>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+</div>

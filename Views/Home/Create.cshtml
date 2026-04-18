@@ -1,0 +1,183 @@
+@model SIBA.ComplaintSystem.Models.Complaint
+
+@{
+    ViewData["Title"] = "New Complaint";
+}
+
+<div class="max-w-4xl mx-auto py-8">
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        
+        <!-- Header -->
+        <div class="bg-primary-600 px-8 py-10 border-b border-primary-700">
+            <h2 class="text-3xl font-extrabold text-white">Submit New Complaint</h2>
+            <p class="text-primary-100 mt-2 text-base">Please fill out the details below to ensure your complaint is assigned correctly.</p>
+        </div>
+        
+        <form asp-action="Create" method="post" enctype="multipart/form-data" class="p-8 pb-12">
+            <div asp-validation-summary="ModelOnly" class="bg-red-50 text-red-600 px-4 py-3 rounded-lg text-sm mb-6 font-medium"></div>
+
+            <!-- 1. Student Information -->
+            <section>
+                <div class="flex items-center space-x-2 border-b border-gray-100 pb-2 mb-6">
+                    <div class="w-8 h-8 rounded bg-primary-50 text-primary-600 flex items-center justify-center font-bold text-sm">1</div>
+                    <h3 class="text-lg font-bold text-gray-900">Student Information</h3>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Student Name</label>
+                        <input type="text" value="@ViewBag.UserName" disabled class="block w-full rounded-lg bg-gray-50 border-gray-200 text-gray-500 shadow-sm p-3 border cursor-not-allowed" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">University Email</label>
+                        <input type="email" value="@ViewBag.UserEmail" disabled class="block w-full rounded-lg bg-gray-50 border-gray-200 text-gray-500 shadow-sm p-3 border cursor-not-allowed" />
+                    </div>
+                    
+                    <div>
+                        <label asp-for="StudentId" class="block text-sm font-medium text-gray-700 mb-1">Student ID / Roll Number</label>
+                        <input asp-for="StudentId" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-600 focus:ring-primary-600 sm:text-sm p-3 border" placeholder="e.g. 000-00-0000" />
+                    </div>
+                    <div>
+                        <label asp-for="ContactNumber" class="block text-sm font-medium text-gray-700 mb-1">Contact Number</label>
+                        <input asp-for="ContactNumber" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-600 focus:ring-primary-600 sm:text-sm p-3 border" placeholder="0300-0000000" />
+                    </div>
+
+                    <div>
+                        <label asp-for="StudentDepartment" class="block text-sm font-medium text-gray-700 mb-1">Department / Program</label>
+                        <input asp-for="StudentDepartment" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-600 focus:ring-primary-600 sm:text-sm p-3 border" placeholder="e.g. BS Computer Science" />
+                    </div>
+                    <div>
+                        <label asp-for="Semester" class="block text-sm font-medium text-gray-700 mb-1">Semester / Year</label>
+                        <input asp-for="Semester" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-600 focus:ring-primary-600 sm:text-sm p-3 border" placeholder="e.g. 6th Semester" />
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Complaint Details -->
+            <section class="pt-8 mt-10 border-t border-gray-100">
+                <div class="flex items-center space-x-2 border-b border-gray-100 pb-2 mb-6">
+                    <div class="w-8 h-8 rounded bg-primary-50 text-primary-600 flex items-center justify-center font-bold text-sm">2</div>
+                    <h3 class="text-lg font-bold text-gray-900">Complaint Details</h3>
+                </div>
+
+                <div class="space-y-6">
+                    <div>
+                        <label asp-for="Title" class="block text-sm font-semibold text-gray-700 mb-1">Complaint Title</label>
+                        <input asp-for="Title" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-600 focus:ring-primary-600 sm:text-sm p-3 border" placeholder="Brief summary of the issue" />
+                        <span asp-validation-for="Title" class="text-red-500 text-xs mt-1 block"></span>
+                    </div>
+
+                    <div>
+                        <label asp-for="Category" class="block text-sm font-semibold text-gray-700 mb-1">Complaint Category <span class="text-red-500">*</span></label>
+                        <select asp-for="Category" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-600 focus:ring-primary-600 sm:text-sm p-3 border bg-white mb-1">
+                            <option value="">-- Select Category --</option>
+                            <option value="Academic">Academic (marks, teacher issue)</option>
+                            <option value="Administration">Administration (fees, documents)</option>
+                            <option value="Hostel/Transport">Hostel / Transport</option>
+                            <option value="IT">IT / System issue</option>
+                            <option value="Others">Others</option>
+                        </select>
+                        <span asp-validation-for="Category" class="text-red-500 text-xs block"></span>
+                    </div>
+
+                    <div>
+                        <label asp-for="Description" class="block text-sm font-semibold text-gray-700 mb-1">Detailed Description <span class="text-red-500">*</span></label>
+                        <textarea asp-for="Description" rows="5" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-600 focus:ring-primary-600 sm:text-sm p-3 border" placeholder="Explain the issue clearly..."></textarea>
+                        <span asp-validation-for="Description" class="text-red-500 text-xs mt-1 block"></span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3 & 4. Priority & Location -->
+            <section class="pt-8 mt-10 border-t border-gray-100">
+                <div class="flex items-center space-x-2 border-b border-gray-100 pb-2 mb-6">
+                    <div class="w-8 h-8 rounded bg-primary-50 text-primary-600 flex items-center justify-center font-bold text-sm">3</div>
+                    <h3 class="text-lg font-bold text-gray-900">Priority & Location</h3>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="md:col-span-2">
+                        <label asp-for="Priority" class="block text-sm font-medium text-gray-700 mb-2">Priority / Severity</label>
+                        <div class="flex space-x-4">
+                            <label class="flex items-center space-x-2 cursor-pointer">
+                                <input type="radio" asp-for="Priority" value="Low" class="text-primary-600 focus:ring-primary-500">
+                                <span class="text-sm font-medium text-slate-700">Low <span class="text-xs text-gray-400 font-normal">(general issue)</span></span>
+                            </label>
+                            <label class="flex items-center space-x-2 cursor-pointer">
+                                <input type="radio" asp-for="Priority" value="Medium" class="text-primary-600 focus:ring-primary-500" checked>
+                                <span class="text-sm font-medium text-slate-700">Medium <span class="text-xs text-gray-400 font-normal">(needs attention)</span></span>
+                            </label>
+                            <label class="flex items-center space-x-2 cursor-pointer">
+                                <input type="radio" asp-for="Priority" value="High" class="text-primary-600 focus:ring-primary-500">
+                                <span class="text-sm font-medium text-slate-700">High <span class="text-xs text-gray-400 font-normal">(urgent problem)</span></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label asp-for="TargetDepartment" class="block text-sm font-medium text-gray-700 mb-1">Target Department</label>
+                        <input asp-for="TargetDepartment" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-600 focus:ring-primary-600 sm:text-sm p-3 border" placeholder="e.g. Accounts Office" />
+                    </div>
+                    <div>
+                        <label asp-for="Location" class="block text-sm font-medium text-gray-700 mb-1">Specific Location</label>
+                        <input asp-for="Location" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-600 focus:ring-primary-600 sm:text-sm p-3 border" placeholder="e.g. Block C, Computer Lab 2" />
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5 & 6. Date, Attachments, Privacy -->
+            <section class="pt-8 mt-10 border-t border-gray-100">
+                <div class="flex items-center space-x-2 border-b border-gray-100 pb-2 mb-6">
+                    <div class="w-8 h-8 rounded bg-primary-50 text-primary-600 flex items-center justify-center font-bold text-sm">4</div>
+                    <h3 class="text-lg font-bold text-gray-900">Proof Details & Privacy</h3>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label asp-for="IncidentDate" class="block text-sm font-medium text-gray-700 mb-1">Date of Incident</label>
+                        <input asp-for="IncidentDate" type="date" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-600 focus:ring-primary-600 sm:text-sm p-3 border" />
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Supporting Attachments</label>
+                        <input type="file" name="attachment" accept=".jpg,.jpeg,.png,.pdf" class="block w-full text-sm text-gray-500 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none file:mr-4 file:py-3 file:px-4 file:rounded-l-lg file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100 transition-colors" />
+                        <p class="text-xs text-gray-400 mt-1">Proof: PDF, JPG, PNG (Max 5MB)</p>
+                    </div>
+
+                    <div class="md:col-span-2 pt-4 border-t border-gray-50">
+                        <label class="flex items-center space-x-3 cursor-pointer group">
+                            <input type="checkbox" asp-for="IsAnonymous" class="w-5 h-5 rounded border-gray-300 text-primary-600 focus:ring-primary-500 cursor-pointer">
+                            <span class="text-sm font-medium text-gray-700 group-hover:text-gray-900 transition-colors">Submit Exceptionally as Anonymous?</span>
+                        </label>
+                        <p class="text-xs text-gray-500 ml-8 mt-1">Check this if you want your identity hidden. (May reduce accountability, but ensures honesty).</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 8 & 9. Terms and Submit -->
+            <section class="mt-12 bg-gray-50 rounded-xl p-6 border border-gray-200 flex flex-col md:flex-row justify-between items-center gap-4">
+                <label class="flex items-start space-x-3 cursor-pointer group flex-1">
+                    <input type="checkbox" required class="w-5 h-5 mt-0.5 rounded border-gray-300 text-primary-600 focus:ring-primary-500 cursor-pointer">
+                    <span class="text-sm font-bold text-gray-700 group-hover:text-gray-900 transition-colors cursor-pointer">
+                        I confirm this complaint is genuine <span class="text-red-500">*</span>
+                        <span class="block text-xs font-medium text-gray-500 mt-1">If evidence proves this complaint is false or meant to harass, disciplinary action may be taken.</span>
+                    </span>
+                </label>
+
+                <div class="flex items-center space-x-4">
+                    <a asp-action="List" class="text-sm font-semibold text-gray-600 hover:text-gray-900 underline">Cancel</a>
+                    <button type="submit" class="px-8 py-4 bg-primary-600 text-white rounded-xl font-bold text-lg shadow-lg shadow-primary-200 hover:bg-primary-700 hover:shadow-primary-300 transition-all active:scale-95 flex items-center space-x-2">
+                        <span>Submit Securely</span>
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                    </button>
+                </div>
+            </section>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom SIBA Styles if needed */
+.siba-card {
+    @apply bg-white rounded-xl shadow-sm border border-gray-100 p-6;
+}
+
+.siba-button-primary {
+    @apply bg-primary-600 text-white px-6 py-2.5 rounded-lg font-medium transition-all hover:bg-primary-700 active:scale-95;
+}
